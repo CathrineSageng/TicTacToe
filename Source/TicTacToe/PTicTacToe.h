@@ -20,11 +20,6 @@ public:
 	// Sets default values for this pawn's properties
 	APTicTacToe();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -33,25 +28,39 @@ public:
 
 
 	UPROPERTY(EditAnywhere)
-	UStaticMeshComponent* Mesh;
+		UStaticMeshComponent* Mesh;
 
 	UPROPERTY(VisibleAnywhere)
-	USpringArmComponent* SpringArm;
+		USpringArmComponent* SpringArm;
 
 	UCameraComponent* Camera;
 
-	UPROPERTY(EditAnywhere)
-	UMaterial* StartColor;
-
-	UPROPERTY(EditAnywhere)
-	UMaterial* Player1;
-
-	UPROPERTY(EditAnywhere)
-	UMaterial* Player2;
-
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AASphere> BP_Sphere_Class;
+		TSubclassOf<AASphere> BP_Sphere_Class;
 
-	AASphere* testSphere[3][3];
+	AASphere* Spheres[3][3];
+	AASphere* ResultSphere1;
+	AASphere* ResultSphere2;
+
+	void ChangeColor(int row, int column);
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+private:
+	bool IsPlayer1 = true;
+
+	void CheckSate();
+
+	void CheckDrawn();
+
+	bool IsGameOver = false;
+
+
+	
+	
+	
+
 
 };

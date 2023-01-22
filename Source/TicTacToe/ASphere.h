@@ -18,24 +18,39 @@ public:
 	// Sets default values for this actor's properties
 	AASphere();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	UPROPERTY(EditAnywhere)
+	UMaterial* StartColor;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(EditAnywhere)
+	UMaterial* Player1;
+
+	UPROPERTY(EditAnywhere)
+	UMaterial* Player2;
 
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* Mesh;
 
-	void SetMaterial(UMaterial* Material) {
-		Mesh->SetMaterial(0, Material);
-	}
-
-	void SetScale(float Scale)
-	{
-		SetActorScale3D(FVector(Scale, Scale, Scale));
-	}
+	enum STATE { EMPTY, PLAYER_1, PLAYER_2 };
 	
+	void SetState(STATE InState);
+
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	void SetScale(float Scale);
+
+	STATE GetState();
+
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+private:
+	STATE State = EMPTY;
+
+	void UpdateMaterialFromState();
+
+	
+
 };

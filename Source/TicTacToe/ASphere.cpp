@@ -19,10 +19,45 @@ void AASphere::BeginPlay()
 	
 }
 
+void AASphere::SetState(STATE InState)
+{
+	if (State==EMPTY) 
+	{
+		State = InState;
+		UpdateMaterialFromState();
+	}
+}
+
 // Called every frame
 void AASphere::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
+
+void AASphere::SetScale(float Scale)
+{
+	SetActorScale3D(FVector(Scale, Scale, Scale));
+}
+
+AASphere::STATE AASphere::GetState()
+{
+	return State;
+}
+
+void AASphere::UpdateMaterialFromState()
+{
+	Mesh->SetMaterial(0, StartColor);
+
+	if (State == PLAYER_1) 
+	{
+		Mesh->SetMaterial(0, Player1);
+	}
+	else if (State == PLAYER_2)
+	{
+		Mesh->SetMaterial(0, Player2);
+	}
+}
+
+
 
