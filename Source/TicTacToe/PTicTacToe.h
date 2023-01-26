@@ -53,10 +53,9 @@ private:
 
 	bool IsGameOver = false;
 
-	void CheckSate();
-
 	void CheckDrawn();
 
-	
+	void CheckState();
+
 
 };

@@ -57,16 +57,16 @@ void APTicTacToe::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	DECLARE_DELEGATE_TwoParams(ChangeColorForSphere, const int, const int);
-	PlayerInputComponent->BindAction<ChangeColorForSphere>("ChangeColor1", IE_Pressed, this, &APTicTacToe::ChangeColor, 0, 0);
-	PlayerInputComponent->BindAction<ChangeColorForSphere>("ChangeColor2", IE_Pressed, this, &APTicTacToe::ChangeColor, 0, 1);
-	PlayerInputComponent->BindAction<ChangeColorForSphere>("ChangeColor3", IE_Pressed, this, &APTicTacToe::ChangeColor, 0, 2);
-	PlayerInputComponent->BindAction<ChangeColorForSphere>("ChangeColor4", IE_Pressed, this, &APTicTacToe::ChangeColor, 1, 0);
-	PlayerInputComponent->BindAction<ChangeColorForSphere>("ChangeColor5", IE_Pressed, this, &APTicTacToe::ChangeColor, 1, 1);
-	PlayerInputComponent->BindAction<ChangeColorForSphere>("ChangeColor6", IE_Pressed, this, &APTicTacToe::ChangeColor, 1, 2);
-	PlayerInputComponent->BindAction<ChangeColorForSphere>("ChangeColor7", IE_Pressed, this, &APTicTacToe::ChangeColor, 2, 0);
-	PlayerInputComponent->BindAction<ChangeColorForSphere>("ChangeColor8", IE_Pressed, this, &APTicTacToe::ChangeColor, 2, 1);
-	PlayerInputComponent->BindAction<ChangeColorForSphere>("ChangeColor9", IE_Pressed, this, &APTicTacToe::ChangeColor, 2, 2);
+	DECLARE_DELEGATE_TwoParams(ChangeColorFunction, const int, const int);
+	PlayerInputComponent->BindAction<ChangeColorFunction>("ChangeColor1", IE_Pressed, this, &APTicTacToe::ChangeColor, 0, 0);
+	PlayerInputComponent->BindAction<ChangeColorFunction>("ChangeColor2", IE_Pressed, this, &APTicTacToe::ChangeColor, 0, 1);
+	PlayerInputComponent->BindAction<ChangeColorFunction>("ChangeColor3", IE_Pressed, this, &APTicTacToe::ChangeColor, 0, 2);
+	PlayerInputComponent->BindAction<ChangeColorFunction>("ChangeColor4", IE_Pressed, this, &APTicTacToe::ChangeColor, 1, 0);
+	PlayerInputComponent->BindAction<ChangeColorFunction>("ChangeColor5", IE_Pressed, this, &APTicTacToe::ChangeColor, 1, 1);
+	PlayerInputComponent->BindAction<ChangeColorFunction>("ChangeColor6", IE_Pressed, this, &APTicTacToe::ChangeColor, 1, 2);
+	PlayerInputComponent->BindAction<ChangeColorFunction>("ChangeColor7", IE_Pressed, this, &APTicTacToe::ChangeColor, 2, 0);
+	PlayerInputComponent->BindAction<ChangeColorFunction>("ChangeColor8", IE_Pressed, this, &APTicTacToe::ChangeColor, 2, 1);
+	PlayerInputComponent->BindAction<ChangeColorFunction>("ChangeColor9", IE_Pressed, this, &APTicTacToe::ChangeColor, 2, 2);
 
 }
 
@@ -78,64 +78,63 @@ void APTicTacToe::ChangeColor(int row, int column)
 		{
 			Spheres[row][column]->SetState(AASphere::PLAYER_1);
 			IsPlayer1 = false;
-			CheckSate();
+			CheckState();
 			CheckDrawn();
 		}
 		else
 		{
 			Spheres[row][column]->SetState(AASphere::PLAYER_2);
 			IsPlayer1 = true;
-			CheckSate();
+			CheckState();
 			CheckDrawn();
 		}
 	}
 }
 
-void APTicTacToe::CheckSate()
+void APTicTacToe::CheckDrawn()
 {
-	if (Spheres[0][0]->GetState() == Spheres[0][1]->GetState()
-		&& Spheres[0][1]->GetState() == Spheres[0][2]->GetState() && Spheres[0][0]->GetState() != AASphere::EMPTY)
+	bool IsDrawn = true;
+	
+	for (int i = 0; i < 3; i++)
 	{
-		ResultSphere1->SetState(Spheres[0][0]->GetState());
-		ResultSphere2->SetState(Spheres[0][0]->GetState());
+		for (int j = 0; j < 3; j++)
+		{
+			if (Spheres[i][j]->GetState() == AASphere::EMPTY)
+			{
+				IsDrawn = false;
+			}
+		}
+	}
+
+	if (IsDrawn)
+	{
+		ResultSphere1->SetState(AASphere::PLAYER_1);
+		ResultSphere2->SetState(AASphere::PLAYER_2);
 		IsGameOver = true;
 	}
-	else if (Spheres[1][0]->GetState() == Spheres[1][1]->GetState()
-		&& Spheres[1][1]->GetState() == Spheres[1][2]->GetState() && Spheres[1][0]->GetState() != AASphere::EMPTY)
+}
+
+void APTicTacToe::CheckState()
+{
+	for (int i = 0; i < 3; i++)
 	{
-		ResultSphere1->SetState(Spheres[1][0]->GetState());
-		ResultSphere2->SetState(Spheres[1][0]->GetState());
-		IsGameOver = true;
+		if (Spheres[i][0]->GetState() == Spheres[i][1]->GetState()
+			&& Spheres[i][1]->GetState() == Spheres[i][2]->GetState() && Spheres[i][0]->GetState() != AASphere::EMPTY)
+		{
+			ResultSphere1->SetState(Spheres[i][0]->GetState());
+			ResultSphere2->SetState(Spheres[i][0]->GetState());
+			IsGameOver = true;
+		}
+		if (Spheres[0][i]->GetState() == Spheres[1][i]->GetState()
+			&& Spheres[1][i]->GetState() == Spheres[2][i]->GetState() && Spheres[0][i]->GetState() != AASphere::EMPTY)
+		{
+			ResultSphere1->SetState(Spheres[0][i]->GetState());
+			ResultSphere2->SetState(Spheres[0][i]->GetState());
+			IsGameOver = true;
+		}
 	}
-	else if (Spheres[2][0]->GetState() == Spheres[2][1]->GetState()
-		&& Spheres[2][1]->GetState() == Spheres[2][2]->GetState() && Spheres[2][0]->GetState() != AASphere::EMPTY)
-	{
-		ResultSphere1->SetState(Spheres[2][0]->GetState());
-		ResultSphere2->SetState(Spheres[2][0]->GetState());
-		IsGameOver = true;
-	}
-	else if (Spheres[0][0]->GetState() == Spheres[1][0]->GetState()
-		&& Spheres[1][0]->GetState() == Spheres[2][0]->GetState() && Spheres[0][0]->GetState() != AASphere::EMPTY)
-	{
-		ResultSphere1->SetState(Spheres[0][0]->GetState());
-		ResultSphere2->SetState(Spheres[0][0]->GetState());
-		IsGameOver = true;
-	}
-	else if (Spheres[0][1]->GetState() == Spheres[1][1]->GetState()
-		&& Spheres[1][1]->GetState() == Spheres[2][1]->GetState() && Spheres[0][1]->GetState() != AASphere::EMPTY)
-	{
-		ResultSphere1->SetState(Spheres[0][1]->GetState());
-		ResultSphere2->SetState(Spheres[0][1]->GetState());
-		IsGameOver = true;
-	}
-	else if (Spheres[0][2]->GetState() == Spheres[1][2]->GetState()
-		&& Spheres[1][2]->GetState() == Spheres[2][2]->GetState() && Spheres[0][2]->GetState() != AASphere::EMPTY)
-	{
-		ResultSphere1->SetState(Spheres[0][2]->GetState());
-		ResultSphere2->SetState(Spheres[0][2]->GetState());
-		IsGameOver = true;
-	}
-	else if (Spheres[0][0]->GetState() == Spheres[1][1]->GetState()
+
+	if (Spheres[0][0]->GetState() == Spheres[1][1]->GetState()
 		&& Spheres[1][1]->GetState() == Spheres[2][2]->GetState() && Spheres[0][0]->GetState() != AASphere::EMPTY)
 	{
 		ResultSphere1->SetState(Spheres[0][0]->GetState());
@@ -147,20 +146,6 @@ void APTicTacToe::CheckSate()
 	{
 		ResultSphere1->SetState(Spheres[0][2]->GetState());
 		ResultSphere2->SetState(Spheres[0][2]->GetState());
-		IsGameOver = true;
-	}
-
-
-}
-
-void APTicTacToe::CheckDrawn()
-{
-	if(Spheres[0][0]-> GetState() != AASphere::EMPTY && Spheres[0][1]->GetState() != AASphere::EMPTY && Spheres[0][2]->GetState() != AASphere::EMPTY
-		&& Spheres[1][0]->GetState() != AASphere::EMPTY && Spheres[1][1]->GetState() != AASphere::EMPTY && Spheres[1][2]->GetState() != AASphere::EMPTY
-		&& Spheres[2][0]->GetState() != AASphere::EMPTY && Spheres[2][1]->GetState() != AASphere::EMPTY && Spheres[2][2]->GetState() != AASphere::EMPTY)
-	{
-		ResultSphere1->SetState(AASphere::PLAYER_1);
-		ResultSphere2->SetState(AASphere::PLAYER_2);
 		IsGameOver = true;
 	}
 }
