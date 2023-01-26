@@ -28,15 +28,15 @@ public:
 
 
 	UPROPERTY(EditAnywhere)
-		UStaticMeshComponent* Mesh;
+	UStaticMeshComponent* Mesh;
 
 	UPROPERTY(VisibleAnywhere)
-		USpringArmComponent* SpringArm;
+	USpringArmComponent* SpringArm;
 
 	UCameraComponent* Camera;
 
 	UPROPERTY(EditDefaultsOnly)
-		TSubclassOf<AASphere> BP_Sphere_Class;
+	TSubclassOf<AASphere> BP_Sphere_Class;
 
 	AASphere* Spheres[3][3];
 	AASphere* ResultSphere1;
@@ -51,16 +51,12 @@ protected:
 private:
 	bool IsPlayer1 = true;
 
+	bool IsGameOver = false;
+
 	void CheckSate();
 
 	void CheckDrawn();
 
-	bool IsGameOver = false;
-
-
 	
-	
-	
-
 
 };

@@ -10,6 +10,15 @@ AASphere::AASphere()
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	RootComponent = Mesh;
+
+	static ConstructorHelpers::FObjectFinder<UMaterial>StartColorMaterial(TEXT("/Script/Engine.Material'/Game/StartColor.StartColor'"));
+	StartColor = StartColorMaterial.Object;
+
+	static ConstructorHelpers::FObjectFinder<UMaterial>Player1Material(TEXT("/Script/Engine.Material'/Game/Player1.Player1'"));
+	Player1 = Player1Material.Object;
+
+	static ConstructorHelpers::FObjectFinder<UMaterial>Player2Material(TEXT("/Script/Engine.Material'/Game/Player2.Player2'"));
+	Player2 = Player2Material.Object;
 }
 
 // Called when the game starts or when spawned

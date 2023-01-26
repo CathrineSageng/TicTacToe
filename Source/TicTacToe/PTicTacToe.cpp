@@ -17,6 +17,8 @@ APTicTacToe::APTicTacToe()
 	
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Springarm"));
 	SpringArm->SetupAttachment(GetRootComponent());
+	SpringArm->TargetArmLength = 2000.f;
+	SpringArm->SetRelativeRotation(FRotator(-70.f, 0.f, 0.f));
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
@@ -27,9 +29,7 @@ APTicTacToe::APTicTacToe()
 // Called when the game starts or when spawned
 void APTicTacToe::BeginPlay()
 {
-	SpringArm->TargetArmLength = 2000.f;
-	SpringArm->SetRelativeRotation(FRotator(-70.f, 0.f, 0.f));
-
+	
 	Super::BeginPlay();
 
 	for (int i = 0; i < 3; i++)

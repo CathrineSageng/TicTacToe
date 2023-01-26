@@ -18,13 +18,13 @@ public:
 	// Sets default values for this actor's properties
 	AASphere();
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere)
 	UMaterial* StartColor;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere)
 	UMaterial* Player1;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere)
 	UMaterial* Player2;
 
 	UPROPERTY(EditAnywhere)
